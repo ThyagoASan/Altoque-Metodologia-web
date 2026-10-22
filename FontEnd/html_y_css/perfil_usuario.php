@@ -27,7 +27,7 @@ if(session_status()==PHP_SESSION_NONE){
                         <th>ID Usuario</th>
                         <th>Nombre Completo</th>
                         <th>Email</th>
-                        <th>Contraseña</th>
+                        <th>Cambiar contraseña</th>
                         <th>Acción</th>
                     </tr>
                 </thead>
@@ -41,7 +41,7 @@ if(session_status()==PHP_SESSION_NONE){
                             <td ><?php echo($publicacion["id"]);?></td>
                             <td><?php echo($publicacion["nombre_completo"]);?></td>
                             <td ><?php echo($publicacion["email"]);?></td>
-                            <td contenteditable="true"><?php echo($publicacion["contraseña"]);?></td>
+                            <td><input type="password" class="password_actual" autocomplete="current-password" placeholder="Contraseña actual"><input type="password" class="password_nueva" autocomplete="new-password" placeholder="Nueva contraseña (8+ caracteres)"></td>
                             <td><button class="boton_modificar_usuario" >Modificar Contraseña</button></td>
                             </tr><?php
                         }
