@@ -142,36 +142,16 @@ async function finalizar_trabajo(e) {
     location.reload();
 }
 
-//modificar_usuario
-
-let boton_modificar_usuario = document.querySelector(
-    ".boton_modificar_usuario"
-);
-if (boton_modificar_usuario) {
-    boton_modificar_usuario.addEventListener("click", (e) => {
-        if (confirm("Esta seguro de modificar la contraseña de su usuario?")) {
-            let fila_tabla = e.target.closest(".fila_tabla");
-            const elementos = fila_tabla.querySelectorAll("td");
-            const id = elementos[0].textContent;
-            const contraseña = elementos[3].textContent;
-            if (contraseña.length >= 6) {
-                array_datos_usuario = {
-                    id: id,
-                    contraseña: contraseña,
-                };
-                fetch("../../backend/modificar_usuario.php", {
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(array_datos_usuario),
-                    method: "POST",
-                })
-                    .then((res) => res.text())
-                    .then((res) => alert(res));
-            } else {
-                alert(
-                    "La contraseña tiene que tener como minimo 6 letras, vuelva a intentar."
-                );
-                location.reload();
-            }
-        }
-    });
-}
+// Cambiar contraseña sin exponer el hash en la interfaz.
+document.querySelectorAll(".boton_modificar_usuario").forEach(boton=>{
+  boton.addEventListener("click",async()=>{
+    const fila=boton.closest("tr");
+    const actual=fila.querySelector(".password_actual")?.value||"";
+    const nueva=fila.querySelector(".password_nueva")?.value||"";
+    if(!actual||nueva.length<8){alert("Ingresá la contraseña actual y una nueva de al menos 8 caracteres.");return;}
+    const res=await fetch("../../backend/modificar_usuario.php",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({actual,nueva})});
+    const datos=await res.json();
+    alert(datos.mensaje||datos.error||"Error al procesar el cambio.");
+    if(res.ok){fila.querySelector(".password_actual").value="";fila.querySelector(".password_nueva").value="";}
+  });
+});
