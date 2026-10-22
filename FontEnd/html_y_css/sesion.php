@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,7 +9,8 @@
     <body>
         <form action="../../backend/login.php" method="POST" class="formulario_login">
             <h2>Formulario Inicio Sesión</h2>
-            <label class="label1">Email <br /></label>
+            <?php if(isset($_GET["error"])) echo '<p role="alert">Email o contraseña incorrectos.</p>'; ?>
+            <label class="label1" for="email_login">Email</label>
             <input
                 id="email_login"
                 name="email"
@@ -19,7 +20,7 @@
                 placeholder="PedroRamirez@gmail.com"
             />
 
-            <label class="label2">Contraseña </label>
+            <label class="label2" for="contraseña_login">Contraseña</label>
             <input
                 id="contraseña_login"
                 class="input1"
@@ -41,6 +42,6 @@
                 <a class="inicio-link" href="pagina1.php">Volver Inicio</a>
             </button>
         </form>
-        <script src="../javascript/login_register.js"></script>
+
     </body>
 </html>
