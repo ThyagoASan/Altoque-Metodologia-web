@@ -13,7 +13,7 @@ Copia de trabajo separada del proyecto grupal original.
 ## Estado
 - Incluye frontend PHP/JS/CSS, endpoints del backend y esquema SQL vacío de cuentas y datos personales.
 - Búsqueda AJAX mejorada; autenticación con password_hash/password_verify para nuevas cuentas.
-- Los ocho archivos binarios de imágenes originales aún no fueron copiados. Las referencias utilizadas en HTML/CSS cargan imágenes del repositorio grupal público original mediante URLs externas.
+- Los ocho archivos binarios de imágenes originales aún no fueron copiados. Las referencias utilizadas en HTML/CSS cargan imágenes del repositorio grupal público original mediante URLs externas. Para obtener copias locales, desde PowerShell en la raíz ejecutá: powershell -ExecutionPolicy Bypass -File scripts/descargar_imagenes.ps1 (luego podés sustituir esas URLs externas por las rutas relativas locales).
 - El archivo backend/usuarios.php antiguo quedó deshabilitado para no filtrar cuentas.
 - Pendiente: probar la aplicación ejecutándola con PHP/MySQL, verificar accesibilidad, corregir validaciones y autorizaciones de endpoints restantes y registrar resultados.
 
