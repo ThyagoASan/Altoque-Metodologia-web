@@ -24,7 +24,7 @@ include ("../../backend/conexion/conexion_dal.php");
                         <th>ID</th>
                         <th>Nombre Completo</th>
                         <th>Email</th>
-                        <th>Contraseña</th>
+                        <th>Seguridad</th>
                         <th>Rol</th>
                         <th>Acción</th>
                     </tr>
@@ -37,7 +37,7 @@ include ("../../backend/conexion/conexion_dal.php");
                             <td> <?php echo ($usuario["id"]);?></td><?php
                             ?><td> <?php echo ($usuario["nombre_completo"]);?></td><?php
                             ?><td> <?php echo ($usuario["email"]);?></td><?php
-                            ?><td> <?php echo ($usuario["contraseña"]);?></td><?php
+                            ?><td>Hash protegido (no visible)</td><?php
                             ?><td> <?php echo ($usuario["rol"]);?></td>
                         <td>
                         <button class="tabla__boton_borrar">
