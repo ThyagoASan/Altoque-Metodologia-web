@@ -1,22 +1,24 @@
 <?php
-include ("conexion/conexion_dal.php");
-error_reporting(0);
-session_start();
-$sesion=$_SESSION["cliente"];
-if($sesion==null || $sesion==""){
-    include("header_sin_sesion.php");
-}else{
-    $respuesta=mysqli_query(get_conexion(),"select * from usuarios where nombre_completo='$sesion'");
-    while($usuario =mysqli_fetch_array($respuesta)){
-    if($usuario["rol"]=="usuario"){
-        include("header_usuario.php");
-    }else if($usuario["rol"]=="usuario_premium"){
-        include("header_usuario_premium.php");
-    }elseif($usuario["rol"]=="administrador"){
-        include("header_admin.php");
-    }else{
-        include("header_sin_sesion.php");
-    }
+require_once __DIR__ . '/conexion/conexion_dal.php';
+if (session_status() === PHP_SESSION_NONE) session_start();
+$directorioVistas = __DIR__ . '/../FontEnd/html_y_css/';
+$vista = 'header_sin_sesion.php';
+if (!empty($_SESSION['id_cliente'])) {
+    $id = (int) $_SESSION['id_cliente'];
+    $stmt = mysqli_prepare(get_conexion(), 'SELECT rol, nombre_completo FROM usuarios WHERE id = ? LIMIT 1');
+    mysqli_stmt_bind_param($stmt, 'i', $id);
+    mysqli_stmt_execute($stmt);
+    $usuario = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+    mysqli_stmt_close($stmt);
+    if ($usuario) {
+        $_SESSION['cliente'] = $usuario['nombre_completo'];
+        $vistas = [
+            'usuario' => 'header_usuario.php',
+            'usuario_premium' => 'header_usuario_premium.php',
+            'administrador' => 'header_admin.php'
+        ];
+        $vista = $vistas[$usuario['rol']] ?? $vista;
     }
 }
+include $directorioVistas . $vista;
 ?>
