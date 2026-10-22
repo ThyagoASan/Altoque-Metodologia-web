@@ -3,7 +3,7 @@ include ('conexion/conexion_dal.php');
 
 $nombre=$_POST["nombre"];
 $email=$_POST["email"];
-$contraseña=$_POST["contraseña"];
+$contraseña=password_hash($_POST["contraseña"], PASSWORD_DEFAULT);
 
 $respuesta=mysqli_query(get_conexion(),"select * from usuarios where email='$email'");
 $cantidad_de_filas=mysqli_num_rows($respuesta);
