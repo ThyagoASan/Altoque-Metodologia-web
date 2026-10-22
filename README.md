@@ -1,19 +1,24 @@
 # AlToque — Metodología Web Ágil
 
-Repositorio de trabajo separado del proyecto original.
+Copia de trabajo separada del proyecto grupal original.
 
-## Estado de la migración
-Se trasladaron las vistas PHP, JavaScript, CSS, los principales endpoints del backend, la versión mejorada de búsqueda AJAX y la documentación en `docs/TP_Desarrollo_Web_Agil.md`.
+## Ejecutar en XAMPP
+1. Arrancar Apache y MySQL en XAMPP.
+2. Extraer el repositorio en C:/xampp/htdocs/Altoque-Metodologia-web/.
+3. Abrir http://localhost/phpmyadmin e importar Base de datos/base_del_proyecto.sql.
+4. Verificar la conexión en backend/conexion/conexion_dal.php (MySQL local).
+5. Abrir http://localhost/Altoque-Metodologia-web/FontEnd/html_y_css/pagina1.php.
+6. Registrar dos usuarios ficticios, publicar un servicio y comprobar su búsqueda y contratación.
 
-**Copia incompleta (requiere completar antes de ejecutar):**
-- Archivos PHP pendientes: `backend/login.php`, `backend/guardar_comentario.php`, `backend/modificar_usuario.php`, `backend/publicacion_contratar.php`, `backend/usuarios.php`.
-- Imágenes de la carpeta `FontEnd/imagenes/` pendientes de copia.
-- `backend/agregar_historico.php` es un archivo vacío en el origen y no fue copiado.
+## Estado
+- Incluye frontend PHP/JS/CSS, endpoints del backend y esquema SQL vacío de cuentas y datos personales.
+- Búsqueda AJAX mejorada; autenticación con password_hash/password_verify para nuevas cuentas.
+- Los ocho archivos binarios de imágenes originales aún no fueron copiados. Las referencias utilizadas en HTML/CSS cargan imágenes del repositorio grupal público original mediante URLs externas.
+- El archivo backend/usuarios.php antiguo quedó deshabilitado para no filtrar cuentas.
+- Pendiente: probar la aplicación ejecutándola con PHP/MySQL, verificar accesibilidad, corregir validaciones y autorizaciones de endpoints restantes y registrar resultados.
 
-## Base de datos
-`Base de datos/base_del_proyecto.sql` incluye la estructura del esquema, **sin registros ni contraseñas de los usuarios**. Para ejecutar localmente, crear datos ficticios de prueba.
+## Trabajo práctico
+Ver docs/TP_Desarrollo_Web_Agil.md. No afirmar que las pruebas o prácticas XP están finalizadas sin evidencia.
 
-## Pruebas
-Las correcciones técnicas requieren pruebas locales en Apache/PHP y MySQL. El diseño responsive y accesibilidad necesitan verificación manual.
-
-**Privacidad:** cambiar el repositorio a privado en GitHub antes de incorporar datos que no deban quedar públicos. No subir contraseñas, tokens ni información personal.
+## Aviso
+No incluir datos reales ni desplegar públicamente hasta completar las revisiones de seguridad y las pruebas.
