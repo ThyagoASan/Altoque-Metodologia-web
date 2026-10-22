@@ -18,7 +18,7 @@ if(session_status()==PHP_SESSION_NONE){
         />
     </head>
     <body>
-        <?php include("C:/xampp/htdocs/Proyecto-Altoque-_desarrollo_y_Arquitect_web/backend/funcion_header.php");
+        <?php include(__DIR__ . "/../../backend/funcion_header.php");
  ?>
         <div class="div__mapa">
             <h1>->AlToque<-</h1>
@@ -55,7 +55,7 @@ if(session_status()==PHP_SESSION_NONE){
     <div class="tarjetas" id="contenedorServicios" aria-live="polite" aria-relevant="additions text">
     <?php 
     $conexion = mysqli_connect("localhost", "root", "", "base_del_proyecto");
-    if($_SESSION["id_cliente"]){
+    if(!empty($_SESSION["id_cliente"])){
         $id_cliente=$_SESSION["id_cliente"];
     }else{
         $id_cliente=0;
@@ -80,10 +80,10 @@ if(session_status()==PHP_SESSION_NONE){
         ?>
         <article class="<?php echo $clase; ?>">
             <?php if($publicacion["rol"] == "usuario_premium") echo '<span class="span_premium">Premium</span>'; ?>
-            <h3><?php echo $publicacion["nombre_completo"]; ?></h3>
+            <h3><?php echo htmlspecialchars($publicacion["nombre_completo"], ENT_QUOTES, "UTF-8"); ?></h3>
             <p><strong>Oficio: </strong><?php echo $publicacion["categoria"]; ?></p>
             <p><strong>Zona: </strong><?php echo $publicacion["zona"]; ?></p>
-            <p><strong>Descripción: </strong><?php echo $publicacion["descripcion"]; ?></p>
+            <p><strong>Descripción: </strong><?php echo htmlspecialchars($publicacion["descripcion"], ENT_QUOTES, "UTF-8"); ?></p>
             <p class="estrellas">estrellas pendiente.</p>
             <?php if($publicacion["id_usuario"]!=$id_cliente){
             ?><button><a id="link_publicacion" href="perfil.php?id=<?php echo $publicacion["id_real_publicacion"]; ?>">Ver perfil</a></button>
