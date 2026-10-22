@@ -9,6 +9,8 @@
 -- Versión de PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+CREATE DATABASE IF NOT EXISTS `base_del_proyecto` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `base_del_proyecto`;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -19,7 +21,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `base_proyecto_wed`
+-- Base de datos: `base_del_proyecto`
 --
 
 -- --------------------------------------------------------
@@ -115,7 +117,7 @@ CREATE TABLE `publicaciones` (
   `zona` varchar(50) NOT NULL,
   `descripcion` varchar(200) NOT NULL,
   `disponible` tinyint(1) NOT NULL,
-  `id_cliente` int(11) NOT NULL
+  `id_cliente` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -130,7 +132,7 @@ CREATE TABLE `publicaciones` (
 DELIMITER $$
 CREATE TRIGGER `despues_de_modificar_publicacion` AFTER UPDATE ON `publicaciones` FOR EACH ROW UPDATE historico_publicaciones 
     SET 
-        id_cliente      = NEW.id_usuario, -- Usas id_cliente como me mostraste en tu código
+        id_cliente      = NEW.id_cliente,
         nombre_completo = NEW.nombre_completo,
         categoria       = NEW.categoria,
         zona            = NEW.zona,
@@ -186,7 +188,8 @@ ALTER TABLE `publicaciones`
 -- Indices de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uk_usuarios_email` (`email`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
