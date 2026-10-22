@@ -37,8 +37,8 @@
                     id="contraseña_registro"
                     type="password"
                     required
-                    minlength="6"
-                    placeholder="Pepito2605"
+                    minlength="8"
+                    placeholder="Mínimo 8 caracteres"
             /></label>
             <a href="#privacyModal" class="privacy-link">
                 Aviso de Privacidad
