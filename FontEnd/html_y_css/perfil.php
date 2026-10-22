@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <?php
 if(session_status()==PHP_SESSION_NONE){
     session_start();
@@ -17,6 +16,7 @@ $zona=$publicacion["zona"];
 $descripcion=$publicacion["descripcion"];
 }
 ?>
+<!DOCTYPE html>
 <html lang="es">
     <head>
         <meta charset="UTF-8" />
