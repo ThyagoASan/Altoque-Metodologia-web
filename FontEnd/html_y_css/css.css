@@ -165,7 +165,7 @@ body {
     width: 100%;
     height: 600px;
     background: linear-gradient(#0008, #0002),
-        url("../imagenes/fondo_imagen_principal.jfif");
+        url("https://raw.githubusercontent.com/ThyagoASan/Proyecto-Altoque-_desarrollo_y_Arquitect_web/main/FontEnd/imagenes/fondo_imagen_principal.jfif");
     background-size: cover;
     margin-bottom: 20px;
     display: flex;
@@ -671,7 +671,7 @@ h2 {
     background: #f3f5f7;
 }
 .admin__encabezado {
-    background-image: url("../imagenes/admin_fondo.jpg");
+    background-image: url("https://raw.githubusercontent.com/ThyagoASan/Proyecto-Altoque-_desarrollo_y_Arquitect_web/main/FontEnd/imagenes/admin_fondo.jpg");
     background-size: cover;
     background-position: center;
     position: relative;
@@ -680,7 +680,7 @@ h2 {
     color: white;
 }
 .usuario__encabezado {
-    background-image: url("../imagenes/fondo_usuarios.jpg");
+    background-image: url("https://raw.githubusercontent.com/ThyagoASan/Proyecto-Altoque-_desarrollo_y_Arquitect_web/main/FontEnd/imagenes/fondo_usuarios.jpg");
 }
 .admin__encabezado::before {
     content: "";
