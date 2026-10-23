@@ -33,7 +33,7 @@ $descripcion=$publicacion["descripcion"];
             <div class="perfil-card">
                 <div class="informacion_card">
                     <div class="perfil-foto">
-                        <img src="https://raw.githubusercontent.com/ThyagoASan/Proyecto-Altoque-_desarrollo_y_Arquitect_web/main/FontEnd/imagenes/usuario.avif" alt="" />
+                        <img src="../imagenes/usuario.avif" alt="" />
                         <span class="text_disponible">
                             <span class="material-icons"> circle </span>
                             Disponible</span
