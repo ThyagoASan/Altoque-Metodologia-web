@@ -680,7 +680,7 @@ h2 {
     color: white;
 }
 .usuario__encabezado {
-    background-image: url("https://raw.githubusercontent.com/ThyagoASan/Proyecto-Altoque-_desarrollo_y_Arquitect_web/main/FontEnd/imagenes/fondo_usuarios.jpg");
+    background-image: url("../imagenes/fondo_usuarios.jpg");
 }
 .admin__encabezado::before {
     content: "";
