@@ -13,7 +13,7 @@ Copia de trabajo separada del proyecto grupal original.
 ## Estado
 - Incluye frontend PHP/JS/CSS, endpoints del backend y esquema SQL vacío de cuentas y datos personales.
 - Búsqueda AJAX mejorada; autenticación con password_hash/password_verify para nuevas cuentas.
-- Seis de las ocho imágenes originales ya están dentro de `FontEnd/imagenes/`. El logo (`logo_al_toque.png`) y el fondo de usuarios (`fondo_usuarios.jpg`) todavía se cargan desde el repositorio grupal público, por límite de transferencia de archivos grandes del conector.
+- Las ocho imágenes originales están incluidas en `FontEnd/imagenes/`, incluido el logo (`logo_al_toque.png`) y el fondo de usuarios (`fondo_usuarios.jpg`).
 - El archivo backend/usuarios.php antiguo quedó deshabilitado para no filtrar cuentas.
 - Pendiente: probar la aplicación ejecutándola con PHP/MySQL, verificar accesibilidad, corregir validaciones y autorizaciones de endpoints restantes y registrar resultados.
 
