@@ -106,6 +106,19 @@ CREATE TABLE `localidades` (
 -- --------------------------------------------------------
 
 --
+-- Localidades iniciales para pruebas de la aplicación.
+INSERT INTO `localidades` (`id`, `localidad`) VALUES
+(1, 'Castelar'),
+(2, 'Morón'),
+(3, 'Ituzaingó'),
+(4, 'Ramos Mejía'),
+(5, 'Haedo'),
+(6, 'San Justo'),
+(7, 'Ciudadela'),
+(8, 'Merlo'),
+(9, 'San Antonio de Padua'),
+(10, 'Hurlingham');
+
 -- Estructura de tabla para la tabla `publicaciones`
 --
 
