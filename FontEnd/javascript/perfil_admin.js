@@ -20,38 +20,33 @@ botonesModificar.forEach((boton) => {
         );
     });
 });
-const enviar_datos_modificar_publicacion = (
-    nuevo_id,
-    nuevo_categoria,
-    nuevo_zona,
-    nuevo_descripcion,
-    nuevo_disponible
+const enviar_datos_modificar_publicacion = async (
+    nuevo_id, nuevo_categoria, nuevo_zona, nuevo_descripcion, nuevo_disponible
 ) => {
-    fetch("../../backend/modificar_publicacion.php", {
-        headers: { "Content-Type": "application/json" },
-        method: "POST",
-        body: JSON.stringify({
-            id: nuevo_id,
-            categoria: nuevo_categoria,
-            zona: nuevo_zona,
-            descripcion: nuevo_descripcion,
-            disponible: nuevo_disponible,
-        }),
-    })
-        .then((res) => res.text())
-        .then((res) => {
-            alert(res);
-            if (
-                res ==
-                "Error, usted no puede volver activar una publicación sin finalizarla primero."
-            ) {
-                document
-                    .getElementById("section_mis_trabajos")
-                    .scrollIntoView({ behavior: "smooth" });
-            } else {
-                location.reload();
-            }
+    try {
+        const respuesta = await fetch("../../backend/modificar_publicacion.php", {
+            headers: { "Content-Type": "application/json" },
+            method: "POST",
+            body: JSON.stringify({
+                id: nuevo_id,
+                categoria: nuevo_categoria.trim(),
+                zona: nuevo_zona.trim(),
+                descripcion: nuevo_descripcion.trim(),
+                disponible: nuevo_disponible,
+            }),
         });
+        const mensaje = await respuesta.text();
+        alert(mensaje);
+        if (!respuesta.ok) {
+            if (mensaje.includes("volver activar")) {
+                document.getElementById("section_mis_trabajos")?.scrollIntoView({ behavior: "smooth" });
+            }
+            return;
+        }
+        location.reload();
+    } catch (error) {
+        alert("No se pudo conectar con el servidor. Intentá nuevamente.");
+    }
 };
 //boton copiar en el portapapeles
 document.addEventListener("DOMContentLoaded", () => {
