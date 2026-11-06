@@ -48,8 +48,8 @@ if (combobox_filtro) {
     combobox_filtro.dispatchEvent(evento_inicial);
     //pagina1 funcion buscar publicaciones con el input
     let controladorBusqueda = null;
-    input_buscador.addEventListener("input", async (e) => {
-        const valorInput = e.target.value.trim();
+    const buscarPublicaciones = async () => {
+        const valorInput = input_buscador.value.trim();
         const filtro = document.getElementById("combo_filtro");
         const campo = filtro.value === "Localidad" ? "zona" : "categoria";
         const contenedor = document.getElementById("contenedorServicios");
@@ -110,7 +110,10 @@ if (combobox_filtro) {
             aviso.textContent = "Error al cargar los resultados. Intentá nuevamente.";
             contenedor.replaceChildren(aviso);
         }
-    });
+    };
+    input_buscador.addEventListener("input", buscarPublicaciones);
+    combobox_filtro.addEventListener("change", buscarPublicaciones);
+    buscarPublicaciones();
 }
 //validacion de confirmacion mas contratacion
 let boton_contratar = document.getElementById("btn-contratar");
