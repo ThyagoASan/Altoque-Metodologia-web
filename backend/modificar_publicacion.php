@@ -1,56 +1,59 @@
 <?php
-require_once "conexion/conexion_dal.php";
-$array_datos=json_decode(file_get_contents("php://input"),true);
-$id=$array_datos["id"];
-$categoria=$array_datos["categoria"];
-$zona=$array_datos["zona"];
-$descripcion=$array_datos["descripcion"];
-$disponible=$array_datos["disponible"];
-
-$respuesta=mysqli_query(get_conexion(),"select p.* from publicaciones p
-          INNER JOIN localidades l ON '$zona' = l.localidad
-          WHERE p.id = $id");
-if(mysqli_num_rows($respuesta)==0){
-    header("Content-Type: text/plain");
-    echo("Atención la localidad ingresada no es valida.");
-    exit;
-}elseif($categoria !='Electricista' && $categoria !='Plomero' &&
- $categoria !='Limpieza' && $categoria !='Jardinería' ){
-    header("Content-Type: text/plain");
-    echo("Atención la categoria ingresada no es valida.");
-    exit;
-}elseif($disponible!=0 && $disponible!=1){
-    header("Content-Type: text/plain");
-    echo("Atención la disponibilidad ingresada no es valida. Solo se permite 1(Activa) o 0(Desactivado).");
-    exit;
+require_once __DIR__ . '/conexion/conexion_dal.php';
+if (session_status() === PHP_SESSION_NONE) session_start();
+header('Content-Type: text/plain; charset=utf-8');
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') { http_response_code(405); exit('Método no permitido.'); }
+if (empty($_SESSION['id_cliente'])) { http_response_code(401); exit('Iniciá sesión.'); }
+$datos = json_decode(file_get_contents('php://input'), true);
+if (!is_array($datos)) { http_response_code(400); exit('Datos inválidos.'); }
+$id = filter_var($datos['id'] ?? null, FILTER_VALIDATE_INT);
+$categoria = trim((string)($datos['categoria'] ?? ''));
+$zona = trim((string)($datos['zona'] ?? ''));
+$descripcion = trim((string)($datos['descripcion'] ?? ''));
+$disponible = filter_var($datos['disponible'] ?? null, FILTER_VALIDATE_INT);
+if (!$id || !in_array($categoria, ['Electricista', 'Plomero', 'Limpieza', 'Jardinería'], true)
+    || $zona === '' || mb_strlen($zona) > 50 || $descripcion === '' || mb_strlen($descripcion) > 200
+    || !in_array($disponible, [0, 1], true)) {
+    http_response_code(400); exit('Revisá la categoría, zona, descripción y disponibilidad.');
 }
-$respuesta_historico_publicaciones=mysqli_query(get_conexion(),"select estado from historico_publicaciones where id_publicacion=$id");
-while ($estado=mysqli_fetch_array($respuesta_historico_publicaciones)){
-if($estado["estado"]=="Contratado en proceso")
-{
-    echo("Error, usted no puede volver activar una publicación sin finalizarla primero.");
-    exit;
-}}
-
-while ($publicacion=mysqli_fetch_array($respuesta)){
-
-if($publicacion["id"]==$id && $publicacion["categoria"]==$categoria && $publicacion["zona"]==$zona && 
-$publicacion["descripcion"]==$descripcion && $publicacion["disponible"]==$disponible){
-    echo("Error no modificaste ningun dato.");
-}else{
-mysqli_query(get_conexion(),
-"update publicaciones set 
-categoria='$categoria',
-zona='$zona',
-descripcion='$descripcion',
-disponible=$disponible  where id='$id'");
-header("Content-Type: text/plain");
-if($publicacion["id"]==$id && $publicacion["categoria"]==$categoria && $publicacion["zona"]==$zona && 
-$publicacion["descripcion"]==$descripcion && $publicacion["disponible"]!=$disponible &&$disponible==1){
-echo("Se activo la publicación con exito.");
+$conexion = get_conexion();
+$idUsuario = (int) $_SESSION['id_cliente'];
+$stmt = mysqli_prepare($conexion, 'SELECT rol FROM usuarios WHERE id = ? LIMIT 1');
+mysqli_stmt_bind_param($stmt, 'i', $idUsuario);
+mysqli_stmt_execute($stmt);
+$usuario = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+mysqli_stmt_close($stmt);
+if (!$usuario) { http_response_code(403); exit('Sin permisos.'); }
+$stmt = mysqli_prepare($conexion, 'SELECT id_usuario, categoria, zona, descripcion, disponible FROM publicaciones WHERE id = ? LIMIT 1');
+mysqli_stmt_bind_param($stmt, 'i', $id);
+mysqli_stmt_execute($stmt);
+$publicacion = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+mysqli_stmt_close($stmt);
+if (!$publicacion) { http_response_code(404); exit('Publicación inexistente.'); }
+if ($usuario['rol'] !== 'administrador' && (int)$publicacion['id_usuario'] !== $idUsuario) {
+    http_response_code(403); exit('No podés modificar esta publicación.');
 }
-else{
-echo("Se modifico la publicación con exito.");
-}}
+$stmt = mysqli_prepare($conexion, 'SELECT id FROM localidades WHERE localidad = ? LIMIT 1');
+mysqli_stmt_bind_param($stmt, 's', $zona);
+mysqli_stmt_execute($stmt);
+$localidad = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+mysqli_stmt_close($stmt);
+if (!$localidad) { http_response_code(400); exit('Atención la localidad ingresada no es valida.'); }
+if ($disponible === 1 && (int)$publicacion['disponible'] === 0) {
+    $stmt = mysqli_prepare($conexion, "SELECT estado FROM historico_publicaciones WHERE id_publicacion = ? AND estado = 'Contratado en proceso' LIMIT 1");
+    mysqli_stmt_bind_param($stmt, 'i', $id);
+    mysqli_stmt_execute($stmt);
+    $enProceso = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+    mysqli_stmt_close($stmt);
+    if ($enProceso) { http_response_code(409); exit('Error, usted no puede volver activar una publicación sin finalizarla primero.'); }
 }
-?>
+if ($publicacion['categoria'] === $categoria && $publicacion['zona'] === $zona
+    && $publicacion['descripcion'] === $descripcion && (int)$publicacion['disponible'] === $disponible) {
+    exit('Error no modificaste ningun dato.');
+}
+$stmt = mysqli_prepare($conexion, 'UPDATE publicaciones SET categoria = ?, zona = ?, descripcion = ?, disponible = ? WHERE id = ?');
+mysqli_stmt_bind_param($stmt, 'sssii', $categoria, $zona, $descripcion, $disponible, $id);
+$ok = mysqli_stmt_execute($stmt);
+mysqli_stmt_close($stmt);
+if (!$ok) { http_response_code(500); exit('No se pudo modificar la publicación.'); }
+echo 'Se modifico la publicación con exito.';
