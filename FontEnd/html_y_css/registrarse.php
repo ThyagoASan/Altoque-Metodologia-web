@@ -16,7 +16,8 @@
                 type="text"
                 id="nombre_completo_registro"
                 required
-                minlength="6"
+                minlength="3"
+                maxlength="60"
                 placeholder="Pedro Ramirez"
             />
             <label class="label1" for="email_registro">Email</label>
@@ -25,6 +26,7 @@
                 name="email"
                 id="email_registro"
                 type="email"
+                maxlength="50"
                 required
                 placeholder="PedroRamirez@gmail.com"
             />
@@ -38,6 +40,8 @@
                     type="password"
                     required
                     minlength="8"
+                    maxlength="72"
+                    autocomplete="new-password"
                     placeholder="Mínimo 8 caracteres"
             /></label>
             <a href="#privacyModal" class="privacy-link">
@@ -79,7 +83,7 @@
             </button>
             <?php 
             if(isset($_GET["error_usuario_existente"]) and  $_GET['error_usuario_existente']==1){
-                echo "el correo ya existe.";
+                echo "<p role=\"alert\">Ese correo electrónico ya está registrado.</p>";
             }
             ?>
         </form>
