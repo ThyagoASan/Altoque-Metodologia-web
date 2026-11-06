@@ -85,7 +85,7 @@ function escaparPublicacion($valor) {
                 </thead>
                 <tbody >
                         <?php 
-                        $respuesta=mysqli_execute_query(get_conexion(), 'SELECT * FROM publicaciones WHERE id_usuario = ? AND disponible = 0', [$id_usuario]);
+                        $respuesta=mysqli_execute_query(get_conexion(), 'SELECT * FROM publicaciones WHERE id_usuario = ? AND disponible = 0 AND id_cliente = 0', [$id_usuario]);
                         ?><h2 style="margin-left: 10px;">No activos</h2> <?php
                         if(mysqli_num_rows($respuesta)>0){
                         while($publicacion=mysqli_fetch_array($respuesta)){
@@ -175,7 +175,7 @@ function escaparPublicacion($valor) {
                         <?php 
                         $respuesta1=mysqli_execute_query(get_conexion(), 'SELECT * FROM historico_publicaciones WHERE id_usuario = ?', [$id_usuario]);
                         while($publicacion=mysqli_fetch_array($respuesta1)){
-                            if($publicacion["id_cliente"]!=null and $publicacion["estado"]=="Finalizado"){
+                            if ((int)$publicacion["id_cliente"] > 0 && $publicacion["estado"] === "Finalizado") {
                                 ?><tr class="fila_tabla">
                                 <td ><?php echo escaparPublicacion($publicacion["id_publicacion"]);?></td>
                                 <td ><?php echo escaparPublicacion($publicacion["id_cliente"]);?></td>
