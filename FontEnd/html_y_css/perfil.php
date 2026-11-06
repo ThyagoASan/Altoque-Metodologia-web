@@ -151,10 +151,18 @@ function escaparPerfil($valor) {
 
                      <?php 
                     $respuesta=mysqli_execute_query(get_conexion(), 'SELECT nombre_usuario, comentario, fecha FROM comentarios WHERE id_publicacion = ? ORDER BY id DESC', [$id_publicacion]);
-                    while($comentario = mysqli_fetch_array($respuesta)){
-                        ?>
-    
-
+                    while ($comentario = mysqli_fetch_assoc($respuesta)) { ?>
+                        <div class="comentario-item">
+                            <div class="comentario-cabecera">
+                                <div class="comentario-autor">
+                                    <span class="material-icons">account_circle</span>
+                                    <strong><?php echo escaparPerfil($comentario['nombre_usuario']); ?></strong>
+                                </div>
+                                <span class="comentario-fecha"><?php echo escaparPerfil($comentario['fecha']); ?></span>
+                            </div>
+                            <p class="comentario-texto"><?php echo nl2br(escaparPerfil($comentario['comentario'])); ?></p>
+                        </div>
+                    <?php } ?>
                 </div>
             </div>
         <script src="../javascript/script.js"></script>
