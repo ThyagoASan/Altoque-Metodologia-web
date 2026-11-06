@@ -13,7 +13,7 @@ if (combobox_filtro) {
                 "Limpieza",
                 "Jardinería",
             ];
-            for (i = 0; i < 4; i++) {
+            for (let i = 0; i < array_profeciones.length; i++) {
                 let opcion = document.createElement("option");
                 opcion.value = array_profeciones[i];
                 docu_fragment.appendChild(opcion);
@@ -191,7 +191,11 @@ function guardar_estrellas(e) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(array_datos),
         method: "POST",
-    }).then(location.reload());
+    }).then(async (respuesta) => {
+        const datos = await respuesta.json();
+        if (!respuesta.ok) { alert(datos.error || 'No se pudo guardar la reseña.'); return; }
+        location.reload();
+    }).catch(() => alert('Error de conexión al guardar la reseña.'));
 }
 
 //rellenar promedio de estrellas
