@@ -115,19 +115,19 @@ if (combobox_filtro) {
 //validacion de confirmacion mas contratacion
 let boton_contratar = document.getElementById("btn-contratar");
 async function contratar_profecional() {
-    id_publicacion_a_contratar = boton_contratar.dataset.id_publicacion;
+    const id_publicacion_a_contratar = boton_contratar.dataset.id_publicacion;
     if (confirm("Desea seguir adelante con su contratación.")) {
         await fetch("../../backend/publicacion_contratar.php", {
-            headers: { "Content-Type": "text_plain" },
+            headers: { "Content-Type": "text/plain" },
             method: "POST",
             body: id_publicacion_a_contratar,
         })
-            .then((res) => res.text())
-            .then((res) => {
-                alert(res);
-                if (res == "Usted tiene que inicio sesión para contratar.") {
+            .then(async (respuesta) => ({ estado: respuesta.status, ok: respuesta.ok, mensaje: await respuesta.text() }))
+            .then(({ estado, ok, mensaje }) => {
+                alert(mensaje);
+                if (estado === 401) {
                     location.href = "../html_y_css/sesion.php";
-                } else {
+                } else if (ok) {
                     location.href = "../html_y_css/pagina1.php";
                 }
             });
