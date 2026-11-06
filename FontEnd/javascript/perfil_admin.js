@@ -109,34 +109,36 @@ function activar_publicacion(e) {
         );
     }
 }
-//finalizar_trabajo
-async function finalizar_trabajo(e) {
-    const filaActual = e.closest(".fila_tabla");
-    const columnas = filaActual.querySelectorAll("td");
-    const nuevo_categoria = columnas[3].textContent;
-    const nuevo_zona = columnas[4].textContent;
-    const nuevo_descripcion = columnas[5].textContent;
-    const id_publicacion1 = columnas[0].textContent;
-    let array_datos = {
-        id_publicacion: id_publicacion1,
-        categoria: nuevo_categoria,
-        descripcion: nuevo_descripcion,
-        zona: nuevo_zona,
+// Finaliza un trabajo solo si el servidor confirma el registro del reemplazo.
+async function finalizar_trabajo(boton) {
+    if (!confirm("¿Querés finalizar este trabajo y crear una nueva publicación disponible?")) return;
+    const fila = boton.closest(".fila_tabla");
+    if (!fila) { alert("No se encontró el trabajo."); return; }
+    const columnas = fila.querySelectorAll("td");
+    const datos = {
+        id_publicacion: columnas[0]?.textContent.trim(),
+        categoria: columnas[3]?.textContent.trim(),
+        zona: columnas[4]?.textContent.trim(),
+        descripcion: columnas[5]?.textContent.trim(),
     };
-    console.log(array_datos);
-    await fetch("../../backend/registrar_publicacion.php", {
-        headers: { "Content-type": "application/json" },
-        body: JSON.stringify(array_datos),
-        method: "POST",
-    })
-        .then((res) => res.text())
-        .then((res) => console.log(res));
-    await fetch("../../backend/borrar_publicacion.php", {
-        headers: { "Content-type": "text/plain" },
-        body: `${id_publicacion1}`,
-        method: "POST",
-    });
-    location.reload();
+    boton.disabled = true;
+    try {
+        const respuesta = await fetch("../../backend/registrar_publicacion.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(datos),
+        });
+        const mensaje = await respuesta.text();
+        if (!respuesta.ok) throw new Error(mensaje || "No se pudo finalizar el trabajo.");
+        // La operación de registro ya actualizó el historial y creó la nueva publicación.
+        // No se borra la original aquí para preservar su trazabilidad.
+        alert(mensaje);
+        location.reload();
+    } catch (error) {
+        alert(error.message || "Ocurrió un error al finalizar el trabajo.");
+    } finally {
+        boton.disabled = false;
+    }
 }
 
 // Cambiar contraseña sin exponer el hash en la interfaz.
