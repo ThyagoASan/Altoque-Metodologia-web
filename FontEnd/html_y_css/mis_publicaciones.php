@@ -138,7 +138,7 @@ function escaparPublicacion($valor) {
                         <?php 
                         $respuesta1=mysqli_execute_query(get_conexion(), 'SELECT * FROM historico_publicaciones WHERE id_usuario = ?', [$id_usuario]);
                         while($publicacion=mysqli_fetch_array($respuesta1)){
-                            if($publicacion["id_usuario"]!=null && $publicacion["estado"]!="Finalizado"){
+                            if ($publicacion["estado"] === "Contratado en proceso") {
                             ?><tr class="fila_tabla">
                             <td ><?php echo escaparPublicacion($publicacion["id_publicacion"]);?></td>
                             <td ><?php echo escaparPublicacion($publicacion["id_cliente"]);?></td>
@@ -173,7 +173,7 @@ function escaparPublicacion($valor) {
                 </thead>
                 <tbody >
                         <?php 
-                        $respuesta1=mysqli_query(get_conexion(),"select * from historico_publicaciones where id_usuario=$id_usuario");
+                        $respuesta1=mysqli_execute_query(get_conexion(), 'SELECT * FROM historico_publicaciones WHERE id_usuario = ?', [$id_usuario]);
                         while($publicacion=mysqli_fetch_array($respuesta1)){
                             if($publicacion["id_cliente"]!=null and $publicacion["estado"]=="Finalizado"){
                                 ?><tr class="fila_tabla">
@@ -207,9 +207,9 @@ function escaparPublicacion($valor) {
                         <?php 
                         $respuesta=mysqli_execute_query(get_conexion(), 'SELECT publicaciones.id AS publicacion_id, usuarios.nombre_completo AS cliente_nombre, usuarios.email AS cliente_email FROM publicaciones INNER JOIN usuarios ON usuarios.id = publicaciones.id_cliente WHERE publicaciones.id_usuario = ?', [$id_usuario]);
                         while($publicacion=mysqli_fetch_array($respuesta)){
-                            if((int)$publicacion["id_cliente"] > 0){
+                            if (!empty($publicacion["publicacion_id"])) {
                             ?><tr class="fila_tabla">
-                            <td ><?php echo escaparPublicacion($publicacion["id"]);?></td>
+                            <td ><?php echo escaparPublicacion($publicacion["publicacion_id"]);?></td>
                             <td ><?php echo escaparPublicacion($publicacion["cliente_nombre"]);?></td>
                             <td class="email_dato"><?php echo escaparPublicacion($publicacion["cliente_email"]);?></td>
                            
