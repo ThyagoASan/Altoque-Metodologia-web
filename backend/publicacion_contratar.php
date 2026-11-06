@@ -20,7 +20,9 @@ try {
     $stmt = mysqli_prepare($conexion, 'UPDATE historico_publicaciones SET disponible = 0, id_cliente = ?, estado = ? WHERE id_publicacion = ?');
     mysqli_stmt_bind_param($stmt, 'isi', $id_cliente, $estado, $id_publicacion);
     mysqli_stmt_execute($stmt);
+    $filasHistorial = mysqli_stmt_affected_rows($stmt);
     mysqli_stmt_close($stmt);
+    if ($filasHistorial !== 1) throw new RuntimeException('Historial inconsistente.');
     mysqli_commit($conexion);
     echo 'Contratación registrada. Consultá el estado en Mis contrataciones.';
 } catch (Throwable $ex) {
