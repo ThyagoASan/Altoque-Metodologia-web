@@ -182,11 +182,12 @@ function get_estrella_mayor_valor() {
 }
 //funcion enviar reseña estrellas
 function guardar_estrellas(e) {
-    array_datos = {
+    const array_datos = {
         estrellas: get_estrella_mayor_valor(),
-        id_usuario: e.dataset.id_usuario,
         id_publicacion: e.dataset.id_publicacion,
     };
+    if (!Number(array_datos.estrellas)) { alert("Seleccioná una calificación antes de enviarla."); return; }
+    e.disabled = true;
     fetch("../../backend/guardar_estrellas.php", {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(array_datos),
@@ -195,7 +196,7 @@ function guardar_estrellas(e) {
         const datos = await respuesta.json();
         if (!respuesta.ok) { alert(datos.error || 'No se pudo guardar la reseña.'); return; }
         location.reload();
-    }).catch(() => alert('Error de conexión al guardar la reseña.'));
+    }).catch(() => alert('Error de conexión al guardar la reseña.')).finally(() => { e.disabled = false; });
 }
 
 //rellenar promedio de estrellas
