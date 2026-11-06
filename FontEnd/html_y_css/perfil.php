@@ -43,7 +43,7 @@ function escaparPerfil($valor) {
                         <img src="../imagenes/usuario.avif" alt="" />
                         <span class="text_disponible">
                             <span class="material-icons"> circle </span>
-                            Disponible</span
+                            <?php echo (int)$publicacion["disponible"] === 1 ? "Disponible" : "No disponible"; ?></span
                         >
                     </div>
                     <div class="informacion_basica-perfil">
@@ -99,6 +99,7 @@ function escaparPerfil($valor) {
                         </span>
                         <a class="inicio-link" href="pagina1.php">Volver</a>
                     </button>
+                    <?php if ((int)$publicacion["disponible"] === 1 && (int)$publicacion["id_usuario"] !== (int)($_SESSION["id_cliente"] ?? 0)) { ?>
                     <form class="form_boton_contratar">
                         <button
                             class="botones-perfil"
@@ -112,12 +113,13 @@ function escaparPerfil($valor) {
                                 >handshake</span>
                             Contratar
                         </button>
-                    </form>    
+                    </form>
+                    <?php } ?>
                 </div>
             </div>
         </section>
         <?php 
-        if(!empty($_SESSION["cliente"])){
+        if (!empty($_SESSION["id_cliente"]) && (int)$publicacion["id_usuario"] !== (int)$_SESSION["id_cliente"]) {
         $respuesta_estrellas=mysqli_execute_query(get_conexion(), 'SELECT estrellas FROM estrellas WHERE id_usuario = ? AND id_publicacion = ?', [(int)$_SESSION['id_cliente'], $id_publicacion]);
         if(mysqli_num_rows($respuesta_estrellas)<1){ ?>
         <div class="section_estrellas">
@@ -136,7 +138,7 @@ function escaparPerfil($valor) {
                  <?php if(!empty($_SESSION["cliente"])){?>
                 <div class="comentarios-nuevo">
                     <h3>Dejar un comentario</h3>
-                    <form action="../../backend/guardar_comentario.php?id_publicacion=<?php echo($id_publicacion);?>&nombre=<?php echo($_SESSION["cliente"]);?>" method="POST">
+                    <form action="../../backend/guardar_comentario.php?id_publicacion=<?php echo($id_publicacion);?>" method="POST">
                         <div class="comentarios-input-group">
                             <textarea name="comentario" placeholder="Escribe tu experiencia con este prestador..." required></textarea>
                         </div>
