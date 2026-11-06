@@ -51,3 +51,30 @@ Proyecto desarrollado en equipo en el marco de una actividad universitaria. Esta
 - Completar validaciones y controles de seguridad.
 - Incorporar capturas de pantalla verificadas de las principales vistas.
 - Mejorar la documentación técnica y de instalación.
+
+## Guía de pruebas funcionales (pendientes de ejecución)
+
+Usar únicamente usuarios ficticios. No probar sobre una base con datos reales. Para una instalación nueva, importar el SQL en una base vacía: el archivo incluye diez localidades de prueba.
+
+1. **Registro:** crear dos usuarios ficticios distintos; verificar que el correo duplicado sea rechazado.
+2. **Sesión:** entrar con credenciales válidas y comprobar el rechazo de una contraseña incorrecta.
+3. **Publicación:** con el usuario A, crear un servicio en una localidad disponible; comprobar su aparición en Mis publicaciones.
+4. **Búsqueda:** buscar por categoría y por localidad en la página principal; verificar los resultados AJAX.
+5. **Perfil:** abrir el servicio y comprobar datos, disponibilidad y ausencia del botón Contratar para el propietario.
+6. **Contratación:** con el usuario B, contratar el servicio de A; comprobar que deja de estar disponible, aparece en Mis contrataciones y figura como Contratado en proceso en el historial.
+7. **Finalización:** con A, finalizar el trabajo; comprobar que el historial conserva Finalizado y se crea una nueva publicación disponible.
+8. **Reseñas y comentarios:** con B, enviar una calificación de 1 a 5 y un comentario; comprobar que se muestran correctamente y que A no puede comentar su propia publicación.
+9. **Permisos:** sin iniciar sesión, intentar entrar a Mis publicaciones, Mis contrataciones y al panel administrativo; verificar que el acceso se bloquee. Con B, intentar modificar o borrar una publicación de A.
+10. **Errores:** comprobar que IDs inválidos, datos vacíos y acciones duplicadas no modifiquen registros.
+
+**Criterio de aprobación:** registrar para cada prueba la fecha, el resultado observado (aprobada/fallida), el usuario ficticio empleado y una captura si corresponde. Ninguna prueba se considera aprobada solo por haber subido código a GitHub.
+
+### Diagnóstico rápido
+
+- Si aparece un error de conexión, verificar Apache, MySQL y `backend/conexion/conexion_dal.php`.
+- Si faltan localidades, revisar que se haya importado el SQL actualizado en una base vacía.
+- Si AJAX falla, abrir las herramientas del navegador (F12), pestañas **Consola** y **Red**, y revisar el código HTTP de la petición.
+- Si la página muestra un error PHP, revisar el registro de errores de Apache en XAMPP.
+- Si ya existe una base con datos, hacer una copia antes de cualquier importación; no volver a importar a ciegas.
+
+**Estado de estas pruebas:** sin ejecutar en XAMPP. El código requiere validación de integración antes de la defensa.
