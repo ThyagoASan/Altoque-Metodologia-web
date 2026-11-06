@@ -131,11 +131,11 @@ function escaparPerfil($valor) {
                 <span class="star" data-value="4">&#9733</span>
                 <span class="star" data-value="5">&#9733</span>
             </span>     
-            <button onclick="guardar_estrellas(this)" data-id_publicacion="<?php echo($id_publicacion)?>" data-id_usuario="<?php echo($_SESSION["id_cliente"])?>"><span class="material-icons">send</span>Enviar Reseña</button>
+            <button onclick="guardar_estrellas(this)" data-id_publicacion="<?php echo($id_publicacion)?>" ><span class="material-icons">send</span>Enviar Reseña</button>
         </div>
         <?php } }?>
         <div class="comentarios-seccion">
-                 <?php if(!empty($_SESSION["cliente"])){?>
+                 <?php if (!empty($_SESSION["id_cliente"]) && (int)$publicacion["id_usuario"] !== (int)$_SESSION["id_cliente"]) {?>
                 <div class="comentarios-nuevo">
                     <h3>Dejar un comentario</h3>
                     <form action="../../backend/guardar_comentario.php?id_publicacion=<?php echo($id_publicacion);?>" method="POST">
