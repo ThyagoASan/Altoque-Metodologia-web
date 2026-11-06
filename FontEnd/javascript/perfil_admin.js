@@ -7,13 +7,10 @@ botonesModificar.forEach((boton) => {
         const nuevo_categoria = columnas[2].textContent;
         const nuevo_zona = columnas[3].textContent;
         const nuevo_descripcion = columnas[4].textContent;
-        const nuevo_disponible = columnas[5].querySelector("input");
-        let result_disponible;
-        if (nuevo_disponible.checked) {
-            result_disponible = 1;
-        } else {
-            result_disponible = 0;
-        }
+        const valorDisponibilidad = columnas[5].querySelector("input");
+        const result_disponible = valorDisponibilidad
+            ? (valorDisponibilidad.checked ? 1 : 0)
+            : Number(columnas[5].textContent.trim());
         enviar_datos_modificar_publicacion(
             nuevo_id,
             nuevo_categoria,
