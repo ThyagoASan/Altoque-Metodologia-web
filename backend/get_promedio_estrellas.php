@@ -1,13 +1,18 @@
-<?php 
-include("conexion/conexion_dal.php");
-$id_publicacion=(int)file_get_contents("php://input");
-$respuesta=mysqli_query(get_conexion(),"select AVG(estrellas) as promedio FROM estrellas WHERE id_publicacion=$id_publicacion");
-header("Content-Type: text/plain");
-if(mysqli_num_rows($respuesta)>0){
-    while($fila=mysqli_fetch_array($respuesta)){
-        echo(($fila["promedio"]));
-    }
-}else{
-    echo('0');
+<?php
+require_once __DIR__ . '/conexion/conexion_dal.php';
+header('Content-Type: text/plain; charset=utf-8');
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    exit('Método no permitido.');
 }
-?>
+$id = filter_var(trim(file_get_contents('php://input')), FILTER_VALIDATE_INT);
+if (!$id || $id <= 0) {
+    http_response_code(400);
+    exit('Publicación inválida.');
+}
+$stmt = mysqli_prepare(get_conexion(), 'SELECT COALESCE(ROUND(AVG(estrellas), 1), 0) AS promedio FROM estrellas WHERE id_publicacion = ?');
+mysqli_stmt_bind_param($stmt, 'i', $id);
+mysqli_stmt_execute($stmt);
+$fila = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+mysqli_stmt_close($stmt);
+echo (string) ($fila['promedio'] ?? 0);
