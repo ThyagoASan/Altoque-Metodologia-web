@@ -1,5 +1,20 @@
-<?php 
-include ("../../backend/conexion/conexion_dal.php");
+<?php
+require_once __DIR__ . '/../../backend/conexion/conexion_dal.php';
+if (session_status() === PHP_SESSION_NONE) session_start();
+if (empty($_SESSION['id_cliente'])) {
+    header('Location: sesion.php');
+    exit;
+}
+$idUsuario = (int) $_SESSION['id_cliente'];
+$stmtRol = mysqli_prepare(get_conexion(), 'SELECT rol FROM usuarios WHERE id = ? LIMIT 1');
+mysqli_stmt_bind_param($stmtRol, 'i', $idUsuario);
+mysqli_stmt_execute($stmtRol);
+$usuarioActual = mysqli_fetch_assoc(mysqli_stmt_get_result($stmtRol));
+mysqli_stmt_close($stmtRol);
+if (!$usuarioActual || $usuarioActual['rol'] !== 'administrador') {
+    http_response_code(403);
+    exit('Acceso restringido a administradores.');
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
